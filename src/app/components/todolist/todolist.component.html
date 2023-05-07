@@ -1,0 +1,59 @@
+
+    <div class="row m-3">
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <a class="btn btn-primary w-100" routerLink="/task">ADD TASK</a>
+        </div>
+        <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
+            <div class="d-flex justify-content-end">
+                <label for="filter" class="me-3">Search</label>
+                <input type="text" id="filter" class="form-control" name="filter" #filter (keyup)="applyFilter(filter.value)">
+            </div>
+        </div>
+    </div>
+<div class="row m-3">
+    <div class="col-md-12">
+        <table class="table table-bordered" id="todolistTable">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="(  tasks == undefined || tasks.length == 0 ); else tableBodyElseBlock" >
+                <tr>
+                    <td colspan="5" class="text-center">
+                        No Data found
+                    </td>
+                </tr>
+            </tbody>
+            <ng-template #tableBodyElseBlock>
+                <tr *ngFor="let task of tasks; let i = index">
+                    <td><label class="m-1">{{ i+1 }}</label></td>
+                    <td><label class="m-1">{{ task.title }}</label></td>
+                    <td><label class="m-1">{{ task.description }}</label></td>
+                    <td *ngIf="task.completed == true; else elseBlock" > 
+                        <label class="m-1">complete</label>
+                    </td>
+                    <ng-template #elseBlock>
+                        <td>
+                            <label class="m-1">not completed</label>
+                        </td>
+                    </ng-template>
+                    <td>
+                        <div class="m-1">
+                            <a class="btn btn-sm btn-success" title="Edit Task" (click)="editTask( task.id )"><i class="bi bi-pencil"></i> </a>
+                            <a class="btn btn-sm btn-danger m-2" title="Delete Task" (click)="deleteTask(task.id)"><i class="bi bi-trash"></i></a>
+                            <a *ngIf="task.completed == false; else divElseBlock" title="Mark as complete" class="btn btn-sm btn-primary" (click)="completeTask(task.id,true)"><i class="bi bi-check-square"></i></a>
+                            <ng-template #divElseBlock>
+                                <a class="btn btn-sm btn-primary" title="Mark as incomplete" (click)="completeTask(task.id,false)"><i class="bi bi-dash-square"></i></a>
+                            </ng-template>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </table>
+    </div>
+</div>
